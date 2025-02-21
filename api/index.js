@@ -61,22 +61,23 @@ app.post("/webhook",async (req,res) => {
         if(message.length > maxWords?.default){
 
           const TelexFormat = {
-            event_name: "telexForms-response",
+            event_name: "modifier",
             message : `exceeded the ${maxWords?.default} word limit`,
             status: "success",
             username : "TelexForms",
           };
             await sendToTelex(TelexFormat)
             return res.json({status:"error",message:`exceeded the ${maxWords?.default} word limit`})
+        }else{
+          const TelexFormat = {
+            event_name: "telexForms-response",
+            message : message,
+            status: "success",
+            username : "TelexForms",
+          };
+          await sendToTelex(TelexFormat);
+          console.log(message)
         }
-        const TelexFormat = {
-          event_name: "telexForms-response",
-          message : message,
-          status: "success",
-          username : "TelexForms",
-        };
-        await sendToTelex(TelexFormat)
-        console.log(message)
     return res.json({status:"success",message:message})
     
     } catch (error) {
