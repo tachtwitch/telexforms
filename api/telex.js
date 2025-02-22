@@ -3,15 +3,13 @@ import { config } from "dotenv";
 
 config()
 
-const url = process.env.WEBHOOK
-
 /**
  * Send form data to telex channel using webhooks.
  *
  * @param {Object|FormData} jsonData - JSON data as an object or Json or form data.
  * @returns {json} Telex Response.
  */
-export const sendToTelex = async (data) => {
+export const sendToTelex = async (data,url) => {
     await fetch(url, {
       method: "POST",
       headers: {

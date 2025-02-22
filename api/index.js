@@ -57,21 +57,14 @@ app.post("/webhook",async (req,res) => {
         });
     
         if(maxWords?.default < message.length){
-          const TelexFormat = {
-            event_name: "modified",
-            message : "",
-            status: "success",
-            username : "TelexForms-modifier",
-          };
-            await sendToTelex(TelexFormat)
+          return res.json({status:"error",message:`message length exceeded ${maxWords?.default}`})
+        }else{
+          const response = {
+            title: "TelexForms",
+            message:message,
+          }
+          return res.json({status:"success",message:jsonToText(response)})
         }
-        const TelexFormat = {
-          event_name: "telexForms-response",
-          message : message,
-          status: "success",
-          username : "TelexForms-modifier",
-        };
-        await sendToTelex(TelexFormat)
     } catch (error) {
         console.log(error)
         res.status(500)
@@ -83,7 +76,8 @@ app.post("/webhook",async (req,res) => {
 app.post("/submit-form", upload.none(), async (req, res) => {
   try {
     
-    const formData = req.body
+    const formData= req.body
+    const webhook = req.query.webhook
 
     if (!formData || (req.body == null||undefined)) {
       return res.status(400).send({ error: "Invalid request" });
@@ -96,7 +90,7 @@ app.post("/submit-form", upload.none(), async (req, res) => {
       username : "TelexForms",
     };
 
-    await sendToTelex(TelexFormat);
+    await sendToTelex(TelexFormat,webhook);
     res.json(formData);
   } catch (error) {
     console.error(error);

@@ -99,19 +99,19 @@ function renderFormPreview() {
   const customForm = document.getElementById('custom-form');
   customForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-  
+    const webhookUrl = prompt("Enter the telex channel webhook url ")
     try {
       const formData = new FormData(customForm);
-      const response = await fetch('/submit-form', {
+      const response = await fetch(`/submit-form?webhook=${webhookUrl}`, {
         method: 'POST',
         body: formData,
       });
       const data = await response.json();
+
       console.log(data);
   
       // Clear the form
       customForm.reset();
-      alert('form submitted to Telex Channel')
     } catch (error) {
       console.error(error);
     }
