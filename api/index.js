@@ -62,9 +62,10 @@ app.post("/webhook",async (req,res) => {
           if (typeof message != "object" && !Array.isArray(jsonData)) {
           
           return res.json({status:"success",message:`TelexForms Custom Form \n${jsonToText(message)}`})
-          }  
+          }
+          return res.json({status:"success",message:message})
         }
-        return res.json({status:"success",message:message})
+        
     } catch (error) {
         console.log(error)
         res.status(500)
