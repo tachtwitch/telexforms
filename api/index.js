@@ -59,12 +59,12 @@ app.post("/webhook",async (req,res) => {
         if(maxWords?.default < message.length){
           return res.json({status:"error",message:`message length exceeded ${maxWords?.default}`})
         }else{
-          const response = {
-            title: "TelexForms",
-            message:message,
-          }
-          return res.json({status:"success",message:jsonToText(response)})
+          if (typeof message != "object" && !Array.isArray(jsonData)) {
+          
+          return res.json({status:"success",message:`TelexForms Custom Form \n${jsonToText(message)}`})
+          }  
         }
+        return res.json({status:"success",message:message})
     } catch (error) {
         console.log(error)
         res.status(500)
